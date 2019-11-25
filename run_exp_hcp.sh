@@ -10,4 +10,5 @@ module load pystan
 
 cd /home/jnh277/HMCMC_structured_lin_sys
 
-python single_param_uniform.noise.py --save_file test
+python single_param_uniform_noise.py --save_file test
+
