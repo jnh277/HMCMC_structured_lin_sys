@@ -5,16 +5,9 @@
 #PBS -l software=torch
 #PBS -k oe
 
-
-
 source /etc/profile.d/modules.sh
 module load pystan
 
+cd /home/jnh277/HMCMC_structured_lin_sys
 
-cd /home/jnh277/Linearly-Constrained-NN
-
-nd=4000
-i=1
-
-
-python experiment
+python single_param_uniform.noise.py --save_file test
