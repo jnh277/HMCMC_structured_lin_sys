@@ -17,7 +17,7 @@ N_data = [10, 17]
 
 eps = 0.3
 theta = 1.0
-stan_model = pickle.load(open('unif_model.pkl', 'rb'))
+stan_model = pickle.load(open('unif_model_hcp.pkl', 'rb'))
 control = {"adapt_delta": 0.85}
 
 theta_hat = np.zeros((len(N_data), 1))
