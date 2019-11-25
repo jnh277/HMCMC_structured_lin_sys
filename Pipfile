@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+cython = "*"
+numpy = "*"
+matplotlib = "*"
+scipy = "*"
+pandas = "*"
+statsmodels = "*"
+seaborn = "*"
+arviz = "*"
+pystan = "*"
+
+[requires]
+python_version = "3.7"

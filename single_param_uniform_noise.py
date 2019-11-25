@@ -5,8 +5,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle
 from pathlib import Path
-import scipy.optimize as opt
-import arviz
 
 
 theta = 1.0
