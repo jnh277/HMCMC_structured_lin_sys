@@ -10,7 +10,7 @@
 for T in {1..200}
 do
      # calls each job script
-     echo "trial ${T}"
-    # qsub -v T=${T} run_exp_trials.sh
+     echo "creating job for trial ${T}"
+    qsub -v T=${T} run_exp_trials.sh
 done
 
