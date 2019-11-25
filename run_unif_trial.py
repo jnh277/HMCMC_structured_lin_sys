@@ -25,6 +25,8 @@ theta_hat = np.zeros((len(N_data), 1))
 eps_hat = np.zeros((len(N_data), 1))
 theta_sq = np.zeros((len(N_data), 1))
 
+print('Running')
+
 class suppress_stdout_stderr(object):
     '''
     A context manager for doing a "deep suppression" of stdout and stderr in
@@ -69,7 +71,7 @@ for nn in range(len(N_data)):
     Ainv = np.linalg.pinv(A)
     theta_sq[nn] = np.matmul(Ainv, y)
 
-print('Finished')
+print('Saving results')
 
 # ----------------- save configuration options and results -------------------------------
 if args.save_file is not '':
@@ -80,7 +82,7 @@ if args.save_file is not '':
     data['theta_sq'] = theta_sq
     sio.savemat('./results/'+ args.save_file+'.mat', data)
 
-
+print('Finished')
 # plt.subplot(2, 1, 1)
 # plt.loglog(N_data, np.abs(theta_hat-theta))
 # plt.loglog(N_data, np.abs(theta_sq-theta))
