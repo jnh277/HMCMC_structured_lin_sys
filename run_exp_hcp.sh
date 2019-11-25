@@ -10,6 +10,7 @@ module load pystan
 
 cd /home/jnh277/HMCMC_structured_lin_sys
 
+echo "Running"
 
 python run_unif_trial.py --save_file test_hcp
 
