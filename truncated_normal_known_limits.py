@@ -16,8 +16,8 @@ import math
 
 N = 200
 theta = 0.5
-U = 0.7
-L = 0.3
+U = 0.8
+L = 0.4
 
 sigma = 0.1
 
@@ -101,7 +101,6 @@ def plot_trace(param,num_plots,pos, param_name='parameter'):
     plt.legend()
 
 
-plot_trace(stan_fit["theta"],3,1,"theta")
-plot_trace(stan_fit["L"],3,2,"L")
-plot_trace(stan_fit["U"],3,3,"L")
+plot_trace(stan_fit["theta"],2,1,"theta")
+plot_trace(stan_fit["sig2"],2,2,"variance")
 plt.show()

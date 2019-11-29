@@ -2,11 +2,11 @@ data {
     int<lower=1> N;
     real U;
     real L;
-    real<lower,upper> y[N];
+    real<lower=L,upper=U> y[N];
 }
 parameters {
-  real<lower=min(y),upper=max(y)> theta;
-//  real<lower=0.0000001> sig2;
+    real<lower=min(y),upper=max(y)> theta;
+    real<lower=0.0000001> sig2;
 
 }
 transformed parameters {
