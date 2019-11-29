@@ -16,7 +16,7 @@ theta_sq = [r.theta_sq];
 
 %%
 N_data = r(1).N_data;
-ind = 4;
+ind = 10;
 
 figure(1)
 clf 
@@ -30,6 +30,8 @@ hold off
 xlims = get(gca,'XLim');
 legend([h1,h2,h3],'Estimator density','True Value','Estimator mean')
 title(['least squares estimates with N = ' num2str(N_data(ind))])
+
+
 
 subplot 132
 h1 = histogram(theta_hat(ind,:),'Normalization','probability');
@@ -51,3 +53,24 @@ h3 = plot([mean(eps_hat(ind,:)) mean(eps_hat(ind,:))],ylims,'--','LineWidth',2);
 hold off
 legend([h1,h2,h3],'Estimator density','True Value','Estimator mean')
 title(['Conditional mean uniform limit estiamtes with N = ' num2str(N_data(ind))])
+
+%% 
+cond_var = mean((theta_hat - theta_true).^2,2);
+lsq_var = mean((theta_sq - theta_true).^2,2);
+
+l1 = 2*eps_true^2./double(N_data).^2;
+l2 = eps_true^2/3./double(N_data);
+
+figure(2)
+clf
+loglog(N_data,cond_var,'LineWidth',2)
+hold on
+loglog(N_data,lsq_var,'LineWidth',2)
+loglog(N_data,l1,'--','LineWidth',2)
+loglog(N_data,l2,'--','LineWidth',2)
+hold off
+title('Estimator variances')
+xlabel('Number of measurements (N)')
+ylabel('Variance of estiamted theta')
+l = legend('cond mean','least squares','$\frac{2\epsilon^2}{N^2}$','$\frac{\epsilon^2}{3N}$');
+set(l,'Interpreter','latex','FontSize',16)
