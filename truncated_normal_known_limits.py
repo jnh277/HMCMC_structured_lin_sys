@@ -14,10 +14,10 @@ import math
 #   known standard deviation
 #   or known limits
 
-N = 200
+N = 1000
 theta = 0.5
-U = 0.8
-L = 0.4
+U = 0.65
+L = -5.0
 
 sigma = 0.1
 
@@ -102,5 +102,5 @@ def plot_trace(param,num_plots,pos, param_name='parameter'):
 
 
 plot_trace(stan_fit["theta"],2,1,"theta")
-plot_trace(stan_fit["sig2"],2,2,"variance")
+plot_trace(stan_fit["sigma"],2,2,"variance")
 plt.show()

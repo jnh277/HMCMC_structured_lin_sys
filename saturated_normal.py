@@ -8,16 +8,15 @@ from pathlib import Path
 
 
 
-N = 500
+N = 200
 x = np.linspace(0,6,num=N)
-xt = 1 + 0 * np.sin(x)
 theta = 0.5
-U = 0.6
+U = 0.65
 L = -1.0
 
 sigma = 0.1
 
-y = theta * xt + np.random.normal(0, sigma, N)
+y = theta + np.random.normal(0, sigma, N)
 
 count = sum(y > U)
 count += sum(y < L)
@@ -48,7 +47,7 @@ else:
         pickle.dump(stan_model, f)
 
 
-data_dict = {"y": y, "N": len(y), "eps": 1e-8, "xt": xt, "U": U, "L": L}
+data_dict = {"y": y, "N": len(y), "eps": 1e-8, "U": U, "L": L, "sig2":sigma*sigma}
 
 control = {"adapt_delta": 0.85, "max_treedepth": 15}
 stan_fit = stan_model.sampling(data=data_dict, thin=2, control=control, iter=4000, chains=4)
