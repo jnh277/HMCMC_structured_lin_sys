@@ -5,61 +5,44 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle
 from pathlib import Path
+import scipy
 
 
+theta = 1.0
+N = 1000
+gamma = 0.25
+y = scipy.stats.cauchy.rvs(loc=theta, scale=gamma, size=N)
 
-N = 200
-x = np.linspace(0,6,num=N)
-theta = 0.5
-U = 0.65
-L = -1.0
 
-sigma = 0.1
-
-y = theta + np.random.normal(0, sigma, N)
-
-count = sum(y > U)
-count += sum(y < L)
-y[y > U] = U
-y[y < L] = L
-
-plt.subplot(2, 1, 1)
-plt.plot(y)
-plt.ylabel('y val')
-plt.xlabel('y number')
-
-plt.subplot(2,1,2)
-plt.hist(y, density=True)
+plt.subplot(1,1,1)
+plt.hist(y, density=True,bins=[0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5])
 plt.xlabel('y val')
 plt.ylabel('histogram density')
 plt.show()
 
 ## ------ now use STAN to get a bayesian estimate ------------
-save_file = Path("./sat_normal_model.pkl")
+save_file = Path("./cauchy_model.pkl")
 if save_file.is_file():
-    stan_model = pickle.load(open('sat_normal_model.pkl', 'rb'))
+    stan_model = pickle.load(open('cauchy_model.pkl', 'rb'))
 else:
     # compile stan model
-    stan_model = ps.StanModel(file="saturated_normal.stan")
+    stan_model = ps.StanModel(file="cauchy_model.stan")
     # save compiled file
-    # save it to the file 'trunc_normal_model.pkl' for later use
-    with open('sat_normal_model.pkl', 'wb') as f:
+    # save it to the file 'model.pkl' for later use
+    with open('cauchy_model.pkl', 'wb') as f:
         pickle.dump(stan_model, f)
 
 
-data_dict = {"y": y, "N": len(y), "eps": 1e-8, "U": U, "L": L, "sig2":sigma*sigma}
 
-control = {"adapt_delta": 0.85, "max_treedepth": 10}
+# Transform the data into a data dict of the structure that stan wants
+# data_dict = {"y": y, "N": len(y), "min_y": y.min(), "max_y": y.max(), "eps": eps}
+data_dict = {"y": y, "N": len(y)}
+
+# initiate monte carlo sampling
+control = {"adapt_delta": 0.8}
 stan_fit = stan_model.sampling(data=data_dict, thin=2, control=control, iter=4000, chains=4)
 
 print(stan_fit)
-
-A = np.ones((len(y),1))
-Ainv = np.linalg.pinv(A)
-theta_sq = np.matmul(Ainv, y)
-
-print(stan_fit["theta"].mean()-theta)
-print(theta_sq-theta)
 
 def plot_trace(param,num_plots,pos, param_name='parameter'):
     """Plot the trace and posterior of a parameter."""
@@ -83,8 +66,16 @@ def plot_trace(param,num_plots,pos, param_name='parameter'):
     plt.gcf().tight_layout()
     plt.legend()
 
-
-plot_trace(stan_fit["theta"],3,1,"theta")
-plot_trace(stan_fit["L"],3,2,"Lower")
-plot_trace(stan_fit["L"],3,3,"Upper")
+plot_trace(stan_fit["theta"],2,1,"theta")
+plot_trace(stan_fit["sigma"],2,2,"gamma")
 plt.show()
+
+# least squares estimate
+A = np.ones((len(y),1))
+Ainv = np.linalg.pinv(A)
+theta_sq = np.matmul(Ainv, y)
+
+print("stan error",stan_fit["theta"].mean()-theta)
+print("least squares error",theta_sq - theta)
+
+

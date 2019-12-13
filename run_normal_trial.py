@@ -14,14 +14,15 @@ N_data = [10, 17, 28, 46, 77, 129, 215, 359, 560, 1000]
 # N_data = [10, 17]
 # N_data = [30, 100, 200, 500, 1000]
 
-eps = 0.3
+sigma = 0.25
 theta = 1.0
-stan_model = pickle.load(open('unif_model_hcp.pkl', 'rb'))
-control = {"adapt_delta": 0.85}
+stan_model = pickle.load(open('normal_model_hcp.pkl', 'rb'))
+control = {"adapt_delta": 0.80}
 
 theta_hat = np.zeros((len(N_data), 1))
-eps_hat = np.zeros((len(N_data), 1))
-theta_sq = np.zeros((len(N_data), 1))
+sigma_hat = np.zeros((len(N_data), 1))
+theta_ML = np.zeros((len(N_data), 1))
+cov_ML = np.zeros((len(N_data), 1))
 
 print('Running')
 
@@ -57,17 +58,18 @@ class suppress_stdout_stderr(object):
 for nn in range(len(N_data)):
     N = N_data[nn]
     print('Inference with N = ', N)
-    y = np.random.uniform(low=theta-eps,high=theta+eps,size=N)  # uniform noisy measurements
+    y = np.random.normal(theta, sigma,size=N)
     data_dict = {"y": y, "N": len(y)}
     with suppress_stdout_stderr():
-        stan_fit = stan_model.sampling(data=data_dict, thin=3, control=control, iter=6000, chains=8)
+        stan_fit = stan_model.sampling(data=data_dict, thin=2, control=control, iter=4000, chains=4)
     theta_hat[nn] = stan_fit["theta"].mean()
-    eps_hat[nn] = stan_fit["eps"].mean()
+    sigma_hat[nn] = stan_fit["sigma"].mean()
 
     # least squares comparison
     A = np.ones((len(y), 1))
     Ainv = np.linalg.pinv(A)
-    theta_sq[nn] = np.matmul(Ainv, y)
+    theta_ML[nn] = np.matmul(Ainv, y)
+    cov_ML[nn] = np.mean((y - theta_ML[nn])*(y - theta_ML[nn]))
 
 print('Saving results')
 
@@ -75,15 +77,10 @@ print('Saving results')
 if args.save_file is not '':
     data = vars(args)       # puts the config options into a dict
     data['theta_hat'] = theta_hat
-    data['eps_hat'] = eps_hat
+    data['sigma_hat'] = sigma_hat
     data['N_data'] = N_data
-    data['theta_sq'] = theta_sq
+    data['theta_ML'] = theta_ML
+    data['cov_ML'] = cov_ML
     sio.savemat('./results/'+ args.save_file+'.mat', data)
 
 print('Finished')
-# plt.subplot(2, 1, 1)
-# plt.loglog(N_data, np.abs(theta_hat-theta))
-# plt.loglog(N_data, np.abs(theta_sq-theta))
-# plt.subplot(2, 1, 2)
-# plt.loglog(N_data, np.abs(eps_hat-eps))
-# plt.show()
