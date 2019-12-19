@@ -35,18 +35,11 @@ model {
     // priors
     theta ~ cauchy(0.25, 1);
     sigma ~ gamma(2, 0.1);
-//    L ~ cauchy(min(y), 5);
-//    U ~ cauchy(max(y),5);
 
     // model
     for (n in 1:N) {
-        if (y[n] < L+eps) {
-            target += log(t1);
-        } else if (y[n] > U-eps) {
-            target += log(t2);
-        } else {
-            target += norm_lpdf(y[n] | theta, sigma*sigma) + log(t3);
+        target += log_sum_exp(norm_lpdf(y[n] | theta, sigma*sigma) + log(t3),
+                    norm_lpdf(y[n]|L,0.00000001)+log(t1));
 
-        }
     }
 }

@@ -11,8 +11,8 @@ from pathlib import Path
 N = 200
 x = np.linspace(0,6,num=N)
 theta = 0.5
-U = 0.65
-L = -1.0
+U = 1.0
+L = 0.35
 
 sigma = 0.1
 
@@ -40,14 +40,16 @@ if save_file.is_file():
     stan_model = pickle.load(open('sat_normal_model.pkl', 'rb'))
 else:
     # compile stan model
-    stan_model = ps.StanModel(file="saturated_normal.stan")
+    stan_model = ps.StanModel(file="saturated_normal_v2.stan")
     # save compiled file
     # save it to the file 'trunc_normal_model.pkl' for later use
     with open('sat_normal_model.pkl', 'wb') as f:
         pickle.dump(stan_model, f)
 
 
-data_dict = {"y": y, "N": len(y), "eps": 1e-8, "U": U, "L": L, "sig2":sigma*sigma}
+# data_dict = {"y": y, "N": len(y), "eps": 1e-8, "U": U, "L": L, "sig2":sigma*sigma}
+data_dict = {"y": y, "N": len(y), "eps": 1e-8, "U": U, "L": L}
+
 
 control = {"adapt_delta": 0.85, "max_treedepth": 10}
 stan_fit = stan_model.sampling(data=data_dict, thin=2, control=control, iter=4000, chains=4)
@@ -84,7 +86,7 @@ def plot_trace(param,num_plots,pos, param_name='parameter'):
     plt.legend()
 
 
-plot_trace(stan_fit["theta"],3,1,"theta")
-plot_trace(stan_fit["L"],3,2,"Lower")
-plot_trace(stan_fit["L"],3,3,"Upper")
+plot_trace(stan_fit["theta"],2,1,"theta")
+plot_trace(stan_fit["sigma"],2,2,"sigma")
+# plot_trace(stan_fit["L"],3,3,"Upper")
 plt.show()
