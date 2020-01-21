@@ -5,6 +5,7 @@ import seaborn as sns
 import pickle
 from pathlib import Path
 import scipy
+from scipy import stats
 
 
 theta = 1.0
@@ -71,12 +72,13 @@ plot_trace(stan_fit["sigma"],3,2,"scale")
 plot_trace(stan_fit["nu"],3,3,"nu")
 plt.show()
 
-# least squares estimate
-A = np.ones((len(y),1))
-Ainv = np.linalg.pinv(A)
-theta_sq = np.matmul(Ainv, y)
+# Maximum likelihood estimate
+MLE = stats.t.fit(y)
+theta_ML = MLE[1]
+nu_ML = MLE[0]
+gamma_ML = MLE[2]
 
 print("stan error",stan_fit["theta"].mean()-theta)
-print("least squares error",theta_sq - theta)
+print("least squares error",theta_ML - theta)
 
 
