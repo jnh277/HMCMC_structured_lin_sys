@@ -21,7 +21,7 @@ nu_ML = 1./[r.nu_ML];
 
 %%
 N_data = r(1).N_data;
-ind = 2;
+ind = 10;
 
 figure(1)
 clf 
@@ -148,7 +148,7 @@ cond_var = mean((nu_hat - nu_true).^2,2);
 ML_var = mean((nu_ML - nu_true).^2,2);
 
 
-figure(3)
+figure(4)
 clf
 loglog(N_data,cond_var,'LineWidth',2)
 hold on

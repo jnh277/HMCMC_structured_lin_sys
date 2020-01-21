@@ -16,7 +16,7 @@ import math
 
 N = 200
 theta = 0.5
-U = 0.8         # the uneven limits really demonstrates benefit of conditional mean
+U = 0.6         # the uneven limits really demonstrates benefit of conditional mean
 L = 0.4
 
 sigma = 0.1

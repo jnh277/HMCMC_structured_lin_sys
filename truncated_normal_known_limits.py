@@ -14,12 +14,12 @@ import math
 #   known standard deviation
 #   or known limits
 
-N = 1000
+N = 100
 theta = 0.5
 U = 0.65
-L = -5.0
+L = 0.35
 
-sigma = 0.1
+sigma = 0.25
 
 
 # sample from a truncated Gaussian
