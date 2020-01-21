@@ -30,7 +30,8 @@ h3 = plot([mean(theta_ML(ind,:)) mean(theta_ML(ind,:))],ylims,'--','LineWidth',2
 hold off
 xlims = get(gca,'XLim');
 legend([h1,h2,h3],'Estimator density','True Value','Estimator mean')
-title(['least squares estimates with N = ' num2str(N_data(ind))])
+title(['Maximum likelihood $\theta$'],'Interpreter','latex')
+set(gca,'FontSize',16)
 
 
 
@@ -43,7 +44,8 @@ h3 = plot([mean(theta_hat(ind,:)) mean(theta_hat(ind,:))],ylims,'--','LineWidth'
 hold off
 set(gca,'XLim',xlims);
 legend([h1,h2,h3],'Estimator density','True Value','Estimator mean')
-title(['Conditional mean estimates with N = ' num2str(N_data(ind))])
+title(['Conditional mean $\theta$'],'Interpreter','latex')
+set(gca,'FontSize',16)
 
 subplot 133
 h1 = histogram(sigma_hat(ind,:),'Normalization','probability');
@@ -53,7 +55,8 @@ h2 = plot([sigma_true sigma_true],ylims,'--','LineWidth',2);
 h3 = plot([mean(sigma_hat(ind,:)) mean(sigma_hat(ind,:))],ylims,'--','LineWidth',2);
 hold off
 legend([h1,h2,h3],'Estimator density','True Value','Estimator mean')
-title(['Conditional mean uniform limit estiamtes with N = ' num2str(N_data(ind))])
+title(['Conditional mean $\sigma$'],'Interpreter','latex')
+set(gca,'FontSize',16)
 
 %% 
 cond_var = mean((theta_hat - theta_true).^2,2);
@@ -70,8 +73,9 @@ loglog(N_data,lsq_var,'LineWidth',2,'LineStyle','--')
 % loglog(N_data,l1,'--','LineWidth',2)
 % loglog(N_data,l2,'--','LineWidth',2)
 hold off
-title('Estimator variances')
-xlabel('Number of measurements (N)')
-ylabel('Variance of estiamted theta')
+title('Estimator variances','Interpreter','latex')
+xlabel('Number of measurements (N)','Interpreter','latex')
+ylabel('Variance of estiamted theta','Interpreter','latex')
 l = legend('cond mean','least squares','$\frac{2\epsilon^2}{N^2}$','$\frac{\epsilon^2}{3N}$');
 set(l,'Interpreter','latex','FontSize',16)
+set(gca,'FontSize',20)
