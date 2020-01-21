@@ -13,7 +13,7 @@ parameters {
 //}
 model {
     // priors
-    theta ~ normal(0, 100);
+    theta ~ normal(0, 10);
 //    sigma ~ inv_gamma(3,1);
     sigma ~ gamma(2,1);
     nu ~ gamma(2,1);
