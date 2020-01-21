@@ -13,4 +13,5 @@ cd /home/jnh277/HMCMC_structured_lin_sys
 echo "Starting trial $T"
 
 #python run_unif_trial.py --save_file unif_trial_${T}
-python run_normal_trial.py --save_file normal_data/trial_${T}
+#python run_normal_trial.py --save_file normal_data/trial_${T}
+python run_studentT_trial.py --save_file studentT_data/trial_${T}
