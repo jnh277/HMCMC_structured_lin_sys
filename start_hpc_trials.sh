@@ -5,7 +5,7 @@
 # run using ./start_hpc_trials.sh
 
 
-for T in {1..5}
+for T in {1..200}
 do
      # calls each job script
      echo "creating job for trial ${T}"
