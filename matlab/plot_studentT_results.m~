@@ -21,11 +21,11 @@ nu_ML = [r.nu_ML];
 
 %%
 N_data = r(1).N_data;
-ind = 1;
+ind = 2;
 
 figure(1)
 clf 
-subplot 131
+subplot 231
 h1 = histogram(theta_ML(ind,:),'Normalization','probability');
 ylims = get(gca,'YLim');
 hold on
@@ -39,7 +39,7 @@ set(gca,'FontSize',16)
 
 
 
-subplot 132
+subplot 23
 h1 = histogram(theta_hat(ind,:),'Normalization','probability');
 ylims = get(gca,'YLim');
 hold on
@@ -51,7 +51,7 @@ legend([h1,h2,h3],'Estimator density','True Value','Estimator mean')
 title(['Conditional mean $\theta$'],'Interpreter','latex')
 set(gca,'FontSize',16)
 
-subplot 133
+subplot 233
 h1 = histogram(gamma_hat(ind,:),'Normalization','probability');
 ylims = get(gca,'YLim');
 hold on
