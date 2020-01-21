@@ -70,7 +70,7 @@ for nn in range(len(N_data)):
     with suppress_stdout_stderr():
         stan_fit = stan_model.sampling(data=data_dict, thin=2, control=control, iter=4000, chains=4)
     theta_hat[nn] = stan_fit["theta"].mean()
-    gamma_hat[nn] = stan_fit["gamma"].mean()
+    gamma_hat[nn] = stan_fit["sigma"].mean()
     nu_hat[nn] = stan_fit["nu"].mean()
 
     # a maximum likelihood comparison
