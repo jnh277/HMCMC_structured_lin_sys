@@ -93,7 +93,6 @@ if args.save_file is not '':
     data['theta_ML'] = theta_ML
     data['gamma_ML'] = gamma_ML
     data['nu_ML'] = gamma_ML
-    data['y'] = y
     sio.savemat('./results/'+ args.save_file+'.mat', data)
 
 print('Finished')
