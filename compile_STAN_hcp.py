@@ -2,6 +2,11 @@
 import pystan as ps
 import pickle
 
+# on hpc run
+# source /etc/profile.d/modules.sh
+# module load pystan
+
+# then run this file to compile
 
 ## ------ compile the stan model on the HPC
 
