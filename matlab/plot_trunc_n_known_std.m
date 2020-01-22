@@ -1,22 +1,20 @@
 clear all
 clc
 
-files = dir('../results/studentT_data/trial*.mat');
+files = dir('../results/trunc_n_known_std_data/trial*.mat');
 
 for i = 1:length(files)
     r(i) = load(strcat(files(i).folder,'/',files(i).name));
 end
 
 theta_true = 1;
-gamma_true = 0.25;
-nu_true = 3.0;
+sigma_true = 0.25;
+L_true = 0.75;
+U_true = 1.25;
 
 theta_hat = [r.theta_hat];
-gamma_hat = [r.gamma_hat];
-nu_hat = [r.nu_hat];
+L_hat = [r.L_hat];
 theta_ML = [r.theta_ML];
-gamma_ML = [r.gamma_ML];
-nu_ML = [r.nu_ML];
 
 
 %%
@@ -25,7 +23,7 @@ ind = 2;
 
 figure(1)
 clf 
-subplot 231
+subplot 131
 h1 = histogram(theta_ML(ind,:),'Normalization','probability');
 ylims = get(gca,'YLim');
 hold on
@@ -39,7 +37,7 @@ set(gca,'FontSize',16)
 
 
 
-subplot 23
+subplot 132
 h1 = histogram(theta_hat(ind,:),'Normalization','probability');
 ylims = get(gca,'YLim');
 hold on
@@ -51,20 +49,20 @@ legend([h1,h2,h3],'Estimator density','True Value','Estimator mean')
 title(['Conditional mean $\theta$'],'Interpreter','latex')
 set(gca,'FontSize',16)
 
-subplot 233
-h1 = histogram(gamma_hat(ind,:),'Normalization','probability');
+subplot 133
+h1 = histogram(L_hat(ind,:),'Normalization','probability');
 ylims = get(gca,'YLim');
 hold on
-h2 = plot([gamma_true gamma_true],ylims,'--','LineWidth',2);
-h3 = plot([mean(gamma_hat(ind,:)) mean(gamma_hat(ind,:))],ylims,'--','LineWidth',2);
+h2 = plot([L_true L_true],ylims,'--','LineWidth',2);
+h3 = plot([mean(L_hat(ind,:)) mean(L_hat(ind,:))],ylims,'--','LineWidth',2);
 hold off
 legend([h1,h2,h3],'Estimator density','True Value','Estimator mean')
-title(['Conditional mean $\sigma$'],'Interpreter','latex')
+title(['Conditional mean lower limit'],'Interpreter','latex')
 set(gca,'FontSize',16)
 
 %% 
 cond_var = mean((theta_hat - theta_true).^2,2);
-ML_var = mean((theta_ML - theta_true).^2,2);
+lsq_var = mean((theta_ML - theta_true).^2,2);
 
 % l1 = 2*eps_true^2./double(N_data).^2;
 % l2 = eps_true^2/3./double(N_data);
@@ -73,7 +71,7 @@ figure(2)
 clf
 loglog(N_data,cond_var,'LineWidth',2)
 hold on
-loglog(N_data,ML_var,'LineWidth',2,'LineStyle','--')
+loglog(N_data,lsq_var,'LineWidth',2,'LineStyle','--')
 % loglog(N_data,l1,'--','LineWidth',2)
 % loglog(N_data,l2,'--','LineWidth',2)
 hold off
