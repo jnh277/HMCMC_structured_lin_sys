@@ -11,7 +11,7 @@ import pickle
 ## ------ compile the stan model on the HPC
 
 # compile stan model
-stan_model = ps.StanModel(file="truncated_normal_known_lim.stan")
+stan_model = ps.StanModel(file="truncated_normal_known_limits.stan")
 # save compiled file
 with open('trunc_normal_lim.pkl', 'wb') as f:
     pickle.dump(stan_model, f)
