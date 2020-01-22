@@ -13,6 +13,6 @@ import pickle
 # compile stan model
 stan_model = ps.StanModel(file="truncated_normal_known_limits.stan")
 # save compiled file
-with open('trunc_normal_lim.pkl', 'wb') as f:
+with open('trunc_normal_lim_hpc.pkl', 'wb') as f:
     pickle.dump(stan_model, f)
 

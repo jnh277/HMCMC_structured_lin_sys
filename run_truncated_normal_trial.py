@@ -26,7 +26,7 @@ sigma = 0.25
 theta = 0.5
 U = 1.0
 L = 0.0
-stan_model = pickle.load(open('trunc_normal_lim_hcp.pkl', 'rb'))
+stan_model = pickle.load(open('trunc_normal_lim_hpc.pkl', 'rb'))
 control = {"adapt_delta": 0.8}
 
 theta_hat = np.zeros((len(N_data), 1))
