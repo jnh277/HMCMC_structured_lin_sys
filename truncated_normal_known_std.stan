@@ -1,18 +1,12 @@
 data {
 int<lower=1> N;
-//  real U;
-//  real L;
     real y[N];
     real<lower=0> sig2;
-//  real<lower=L,upper=U> y[N]; // works really well with known truncation points
-
-//  real<lower=0> eps;
 }
 parameters {
   real<lower=min(y),upper=max(y)> theta;
   real L; // assuming we don't know truncation points
   real U;
-//  real<lower=0.0000001> sig2;
 
 }
 transformed parameters {

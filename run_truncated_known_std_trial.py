@@ -11,8 +11,8 @@ parser.add_argument('--save_file', default='', help='save file name (default: wo
 
 args = parser.parse_args()
 
-# N_data = [10, 17, 28, 46, 77, 129, 215, 359, 560, 1000]
-N_data = [10, 17]
+N_data = [10, 17, 28, 46, 77, 129, 215, 359, 560, 1000]
+# N_data = [10, 17]
 # N_data = [30, 100, 200, 500, 1000]
 
 def real_normal_lub_rng(mu, sigma, lb, ub, N):
