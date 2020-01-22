@@ -14,10 +14,10 @@ import math
 #   known standard deviation
 #   or known limits
 
-N = 100
+N = 400
 theta = 0.5
-U = 0.65
-L = 0.35
+U = 1.0
+L = 0.0
 
 sigma = 0.25
 
@@ -30,8 +30,8 @@ def real_normal_lub_rng(mu, sigma, lb, ub, N):
     x = mu + sigma * norm.ppf(u)
     return x
 
-
-y =real_normal_lub_rng(theta, sigma, L, U, N)
+x = np.sin(np.linspace(0,6.0,N)) + 1.0
+y =real_normal_lub_rng(theta*x, sigma, L, U, N)
 
 count = sum(y > U)
 count += sum(y < L)
@@ -61,7 +61,7 @@ else:
         pickle.dump(stan_model, f)
 
 
-data_dict = {"y": y, "N": len(y), "U": U, "L": L}
+data_dict = {"y": y, "N": len(y), "U": U, "L": L, "x":x}
 
 control = {"adapt_delta": 0.8}
 stan_fit = stan_model.sampling(data=data_dict, thin=2, control=control, iter=4000, chains=4)
@@ -72,11 +72,15 @@ print(stan_fit)
 # plt.show()
 # least squares estimate
 A = np.ones((len(y),1))
+A[:,0] = x
+# A = np.ones((len(y),1))*x
 Ainv = np.linalg.pinv(A)
 theta_sq = np.matmul(Ainv, y)
 
 print(stan_fit["theta"].mean()-theta)
 print(theta_sq-theta)
+
+print("sigma est",stan_fit["sigma"].mean())
 
 def plot_trace(param,num_plots,pos, param_name='parameter'):
     """Plot the trace and posterior of a parameter."""
@@ -102,5 +106,5 @@ def plot_trace(param,num_plots,pos, param_name='parameter'):
 
 
 plot_trace(stan_fit["theta"],2,1,"theta")
-plot_trace(stan_fit["sigma"],2,2,"variance")
+plot_trace(stan_fit["sigma"],2,2,"sigma")
 plt.show()
