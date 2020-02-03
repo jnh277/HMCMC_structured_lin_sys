@@ -40,6 +40,5 @@ model {
     for (n in 1:N) {
         target += log_sum_exp(norm_lpdf(y[n] | theta, sigma*sigma) + log(t3),
                     norm_lpdf(y[n]|L,0.00000001)+log(t1));
-
     }
 }

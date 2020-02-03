@@ -12,7 +12,7 @@ N = 200
 x = np.linspace(0,6,num=N)
 theta = 0.5
 U = 1.0
-L = 0.35
+L = 0.45
 
 sigma = 0.1
 
@@ -40,7 +40,7 @@ if save_file.is_file():
     stan_model = pickle.load(open('sat_normal_model.pkl', 'rb'))
 else:
     # compile stan model
-    stan_model = ps.StanModel(file="saturated_normal_v2.stan")
+    stan_model = ps.StanModel(file="saturated_normal.stan")
     # save compiled file
     # save it to the file 'trunc_normal_model.pkl' for later use
     with open('sat_normal_model.pkl', 'wb') as f:

@@ -16,10 +16,9 @@ import math
 
 N = 400
 theta = 0.5
-U = 1.0
-L = 0.0
+eps = 0.25
 
-sigma = 0.25
+sigma = 0.15
 
 
 # sample from a truncated Gaussian
@@ -30,11 +29,9 @@ def real_normal_lub_rng(mu, sigma, lb, ub, N):
     x = mu + sigma * norm.ppf(u)
     return x
 
-x = np.sin(np.linspace(0,6.0,N)) + 1.0
-y =real_normal_lub_rng(theta*x, sigma, L, U, N)
 
-count = sum(y > U)
-count += sum(y < L)
+y =real_normal_lub_rng(theta, sigma, theta-eps, theta+eps, N)
+
 
 
 plt.subplot(2, 1, 1)
@@ -49,22 +46,22 @@ plt.ylabel('histogram density')
 plt.show()
 
 # ------ now use STAN to get a bayesian estimate ------------
-save_file = Path("./trunc_normal_model_lim.pkl")
+save_file = Path("./trunc_normal.pkl")
 if save_file.is_file():
-    stan_model = pickle.load(open('trunc_normal_model_lim.pkl', 'rb'))
+    stan_model = pickle.load(open('trunc_normal.pkl', 'rb'))
 else:
     # compile stan model
-    stan_model = ps.StanModel(file="truncated_normal_known_limits.stan")
+    stan_model = ps.StanModel(file="truncated_normal.stan")
     # save compiled file
     # save it to the file 'trunc_normal_model.pkl' for later use
-    with open('trunc_normal_model_lim.pkl', 'wb') as f:
+    with open('trunc_normal.pkl', 'wb') as f:
         pickle.dump(stan_model, f)
 
 
-data_dict = {"y": y, "N": len(y), "U": U, "L": L, "x":x}
+data_dict = {"y": y, "N": len(y), "eps":eps}
 
-control = {"adapt_delta": 0.8}
-stan_fit = stan_model.sampling(data=data_dict, thin=2, control=control, iter=4000, chains=4)
+control = {"adapt_delta": 0.85}
+stan_fit = stan_model.sampling(data=data_dict, thin=3, control=control, iter=4000, chains=6)
 
 print(stan_fit)
 
@@ -72,7 +69,6 @@ print(stan_fit)
 # plt.show()
 # least squares estimate
 A = np.ones((len(y),1))
-A[:,0] = x
 # A = np.ones((len(y),1))*x
 Ainv = np.linalg.pinv(A)
 theta_sq = np.matmul(Ainv, y)
@@ -105,6 +101,7 @@ def plot_trace(param,num_plots,pos, param_name='parameter'):
     plt.legend()
 
 
-plot_trace(stan_fit["theta"],2,1,"theta")
-plot_trace(stan_fit["sigma"],2,2,"sigma")
+plot_trace(stan_fit["theta"],3,1,"theta")
+plot_trace(stan_fit["sigma"],3,2,"sigma")
+plot_trace(stan_fit["eps"],3,3,"eps")
 plt.show()
